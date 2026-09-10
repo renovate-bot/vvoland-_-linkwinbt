@@ -30,7 +30,7 @@ You can read more about the exact steps in the [DESIGN.md](DESIGN.md) file.
 - A dual-boot Linux/Windows system
 - Bluetooth devices paired on **Linux FIRST** and then on Windows
 - Access to the Windows registry file (`C:\Windows\System32\config\SYSTEM`) 
-- [non-Docker usage] `reged` tool installed on Linux (usualy provided by `chntpw` package)
+- When not using Docker or Nix: `reged` installed on Linux (usually provided by the `chntpw` package)
 
 
 ### Easy run with Docker
@@ -101,6 +101,31 @@ docker buildx bake "https://github.com/vvoland/linkwinbt.git?tag=v<VERSION>"
 
 ```bash
 go install grono.dev/linkwinbt/cmd/linkwinbt@latest
+```
+
+### Build with Nix
+
+The flake supports `x86_64-linux` and `aarch64-linux` and includes `reged` from
+`chntpw`. Enable Nix's `nix-command` and `flakes` experimental features first.
+
+From a checkout:
+
+```fish
+nix build
+sudo ./result/bin/linkwinbt /path/to/windows
+```
+
+To show the command's help without building a local result symlink:
+
+```fish
+nix run . -- -h
+```
+
+For development, `nix develop` provides Go and `reged`:
+
+```fish
+nix develop
+go test ./...
 ```
 
 
